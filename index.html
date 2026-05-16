@@ -3,162 +3,913 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darvin Magundayao | Computational Chemist & AI Researcher</title>
+    <title>Darvin Magundayao — Computational Chemist & AI Researcher</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #060810;
+            --surface: #0c0f1a;
+            --surface2: #111527;
+            --border: rgba(255,255,255,0.07);
+            --text: #edf0f7;
+            --muted: #6b728e;
+            --accent: #5c7cfa;
+            --accent2: #38d9a9;
+            --accent3: #f783ac;
+            --glow: rgba(92, 124, 250, 0.15);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', -apple-system, sans-serif; background: #0d1117; color: #e6edf3; line-height: 1.6; }
 
-        .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+        html { scroll-behavior: smooth; }
 
-        header { padding: 20px 0; border-bottom: 1px solid #21262d; margin-bottom: 60px; }
-        nav { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 18px; font-weight: 600; color: #58a6ff; }
-        .nav-links { display: flex; gap: 24px; list-style: none; }
-        .nav-links a { color: #8b949e; text-decoration: none; font-size: 14px; }
-        .nav-links a:hover { color: #e6edf3; }
+        body {
+            font-family: 'DM Mono', monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-        .hero { padding: 60px 0 80px; }
-        h1 { font-size: 42px; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.02em; }
-        h1 span { color: #58a6ff; }
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.4;
+        }
 
-        .badge { display: inline-flex; align-items: center; gap: 8px; background: #161b22; border: 1px solid #21262d; padding: 6px 12px; border-radius: 50px; font-size: 13px; color: #8b949e; margin-bottom: 16px; }
-        .badge .dot { width: 8px; height: 8px; background: #7ee787; border-radius: 50%; }
-        .subtitle { font-size: 17px; color: #8b949e; max-width: 520px; margin-bottom: 24px; }
+        /* Animated background orbs */
+        .bg-orbs {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.12;
+            animation: drift 20s ease-in-out infinite;
+        }
+        .orb-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -100px; animation-delay: 0s; }
+        .orb-2 { width: 400px; height: 400px; background: var(--accent2); bottom: 20%; right: -100px; animation-delay: -7s; }
+        .orb-3 { width: 300px; height: 300px; background: var(--accent3); top: 50%; left: 30%; animation-delay: -14s; }
 
-        .btn { display: inline-flex; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; text-decoration: none; transition: all 0.3s; }
-        .btn-primary { background: #58a6ff; color: #fff; }
-        .btn-primary:hover { background: #79b8ff; }
-        .btn-secondary { background: #161b22; color: #e6edf3; border: 1px solid #21262d; }
-        .btn-secondary:hover { border-color: #58a6ff; }
-        .hero-cta { display: flex; gap: 12px; }
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(40px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
 
-        section { padding: 60px 0; border-top: 1px solid #21262d; }
-        h2 { font-size: 24px; font-weight: 600; margin-bottom: 24px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
 
-        .timeline { position: relative; padding-left: 24px; }
-        .timeline::before { content: ''; position: absolute; left: 0; top: 4px; bottom: 4px; width: 2px; background: #21262d; }
-        .timeline-item { position: relative; margin-bottom: 32px; }
-        .timeline-item::before { content: ''; position: absolute; left: -24px; top: 5px; width: 8px; height: 8px; background: #58a6ff; border-radius: 50%; }
-        .timeline-date { font-size: 12px; color: #58a6ff; font-weight: 500; margin-bottom: 2px; }
-        .timeline-title { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
-        .timeline-org { color: #8b949e; font-size: 14px; margin-bottom: 6px; }
-        .timeline-org a { color: #8b949e; text-decoration: none; }
-        .timeline-org a:hover { color: #58a6ff; }
-        .timeline-desc { color: #8b949e; font-size: 14px; line-height: 1.7; }
+        /* ── NAV ── */
+        header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 0;
+        }
+        nav {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s, background 0.3s, backdrop-filter 0.3s;
+        }
+        nav.scrolled {
+            background: rgba(6, 8, 16, 0.8);
+            backdrop-filter: blur(20px);
+            border-color: var(--border);
+        }
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            color: var(--text);
+            letter-spacing: -0.03em;
+        }
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: color 0.2s;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0; right: 0;
+            height: 1px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transition: transform 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+        .nav-links a:hover::after { transform: scaleX(1); }
 
-        .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-        .skill-card { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 20px; }
-        .skill-icon { width: 36px; height: 36px; background: #21262d; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 12px; }
-        .skill-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-        .skill-card p { color: #8b949e; font-size: 13px; }
-        .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
-        .tag { background: #21262d; padding: 4px 10px; border-radius: 50px; font-size: 12px; color: #8b949e; }
+        /* ── HERO ── */
+        .hero {
+            padding: 180px 0 120px;
+            position: relative;
+        }
 
-        .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 32px; }
-        .stat-card { background: #161b22; border: 1px solid #21262d; border-radius: 10px; padding: 20px; }
-        .stat-number { font-size: 28px; font-weight: 700; color: #58a6ff; }
-        .stat-label { font-size: 13px; color: #8b949e; margin-top: 4px; }
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent2);
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeUp 0.6s ease forwards 0.2s;
+        }
+        .hero-eyebrow .pulse {
+            width: 8px; height: 8px;
+            background: var(--accent2);
+            border-radius: 50%;
+            position: relative;
+        }
+        .hero-eyebrow .pulse::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            background: var(--accent2);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: pulseRing 2s ease infinite;
+        }
+        @keyframes pulseRing {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
 
-        .about-content p { color: #8b949e; font-size: 15px; margin-bottom: 16px; }
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(48px, 8vw, 84px);
+            font-weight: 800;
+            line-height: 1.0;
+            letter-spacing: -0.04em;
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease forwards 0.35s;
+        }
+        h1 .first { display: block; color: var(--text); }
+        h1 .last {
+            display: block;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%, var(--accent3) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-        footer { padding: 40px 0; border-top: 1px solid #21262d; text-align: center; color: #8b949e; font-size: 14px; }
-        .footer-links { display: flex; justify-content: center; gap: 24px; margin-bottom: 16px; }
-        .footer-links a { color: #8b949e; text-decoration: none; }
-        .footer-links a:hover { color: #58a6ff; }
+        .hero-sub {
+            font-size: 14px;
+            color: var(--muted);
+            max-width: 480px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease forwards 0.5s;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 0.7s ease forwards 0.65s;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 26px;
+            border-radius: 6px;
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            transition: all 0.25s;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 0 0 0 rgba(92,124,250,0.4);
+        }
+        .btn-primary:hover {
+            background: #7c9bfc;
+            box-shadow: 0 0 24px rgba(92,124,250,0.4);
+            transform: translateY(-1px);
+        }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-ghost:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        /* ── DIVIDER ── */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border) 30%, var(--border) 70%, transparent);
+            margin: 0;
+        }
+
+        /* ── SECTIONS ── */
+        section {
+            padding: 90px 0;
+        }
+        .section-label {
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+        h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 48px;
+            color: var(--text);
+        }
+
+        /* ── ABOUT ── */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .about-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            transition: border-color 0.3s, transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        .about-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--glow), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .about-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+        .about-card:hover::before { opacity: 1; }
+        .about-card-icon {
+            font-size: 24px;
+            margin-bottom: 14px;
+        }
+        .about-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            position: relative;
+        }
+        .about-card p {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.7;
+            position: relative;
+        }
+        .about-card .highlight {
+            color: var(--accent2);
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            display: block;
+            position: relative;
+        }
+
+        /* ── TIMELINE ── */
+        .timeline { position: relative; }
+        .timeline-track {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 1px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            padding-left: 36px;
+            padding-bottom: 56px;
+            position: relative;
+            opacity: 0;
+            transform: translateX(-16px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .timeline-item.visible { opacity: 1; transform: translateX(0); }
+        .timeline-item:last-child { padding-bottom: 0; }
+
+        .timeline-dot {
+            position: absolute;
+            left: -5px;
+            top: 6px;
+            width: 11px; height: 11px;
+            border-radius: 50%;
+            background: var(--surface);
+            border: 2px solid var(--accent);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .timeline-item:hover .timeline-dot {
+            background: var(--accent);
+            box-shadow: 0 0 12px var(--accent);
+        }
+        .timeline-item.active .timeline-dot {
+            background: var(--accent2);
+            border-color: var(--accent2);
+            box-shadow: 0 0 12px var(--accent2);
+        }
+
+        .timeline-meta {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .timeline-date {
+            font-size: 11px;
+            color: var(--accent);
+            letter-spacing: 0.06em;
+        }
+        .timeline-item.active .timeline-date { color: var(--accent2); }
+        .badge-pill {
+            font-size: 10px;
+            padding: 3px 10px;
+            border-radius: 50px;
+            letter-spacing: 0.06em;
+        }
+        .badge-active { background: rgba(56,217,169,0.12); color: var(--accent2); border: 1px solid rgba(56,217,169,0.2); }
+        .badge-upcoming { background: rgba(92,124,250,0.12); color: var(--accent); border: 1px solid rgba(92,124,250,0.2); }
+
+        .timeline-body {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px 28px;
+            transition: border-color 0.3s;
+        }
+        .timeline-item:hover .timeline-body { border-color: rgba(92,124,250,0.3); }
+        .timeline-role {
+            font-family: 'Syne', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 4px;
+        }
+        .timeline-org {
+            font-size: 12px;
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+        .timeline-org a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+        .timeline-org a:hover { color: var(--accent); }
+        .timeline-desc {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        /* ── SKILLS ── */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        .skill-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            cursor: default;
+        }
+        .skill-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        .skill-card:hover { border-color: rgba(92,124,250,0.3); transform: translateY(-4px); }
+        .skill-card:hover::after { transform: scaleX(1); }
+        .skill-icon {
+            font-size: 28px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .skill-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .skill-card p { font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.7; }
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            transition: all 0.2s;
+        }
+        .skill-card:hover .tag { border-color: rgba(92,124,250,0.3); color: var(--accent); }
+
+        /* ── TERMINAL BLOCK ── */
+        .terminal {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 60px;
+        }
+        .terminal-bar {
+            background: var(--surface2);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        .t-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .t-dot-r { background: #ff5f57; }
+        .t-dot-y { background: #febc2e; }
+        .t-dot-g { background: #28c840; }
+        .terminal-title { font-size: 11px; color: var(--muted); margin-left: 8px; letter-spacing: 0.06em; }
+        .terminal-body { padding: 24px 28px; }
+        .terminal-line { font-size: 12px; line-height: 2; }
+        .t-prompt { color: var(--accent2); }
+        .t-cmd { color: var(--text); }
+        .t-out { color: var(--muted); }
+        .t-accent { color: var(--accent); }
+        .t-green { color: var(--accent2); }
+        .cursor {
+            display: inline-block;
+            width: 8px; height: 14px;
+            background: var(--accent2);
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* ── CONTACT ── */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .contact-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 28px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .contact-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 32px rgba(92,124,250,0.1); }
+        .contact-icon {
+            width: 44px; height: 44px;
+            background: var(--surface2);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            transition: background 0.3s;
+        }
+        .contact-card:hover .contact-icon { background: rgba(92,124,250,0.2); }
+        .contact-info h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+        .contact-info p { font-size: 12px; color: var(--muted); }
+
+        /* ── FOOTER ── */
+        footer {
+            padding: 48px 0;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+        }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--accent); }
+
+        /* ── SCROLL ANIMATIONS ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── CUSTOM CURSOR ── */
+        .cursor-dot {
+            position: fixed;
+            width: 8px; height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.15s ease;
+            transform: translate(-50%, -50%);
+        }
+        .cursor-ring {
+            position: fixed;
+            width: 32px; height: 32px;
+            border: 1px solid rgba(92,124,250,0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9997;
+            transition: transform 0.4s ease, width 0.3s, height 0.3s, border-color 0.3s;
+            transform: translate(-50%, -50%);
+        }
 
         @media (max-width: 768px) {
-            h1 { font-size: 28px; }
+            h1 { font-size: 44px; }
+            .about-grid, .skills-grid, .contact-grid { grid-template-columns: 1fr; }
             .nav-links { display: none; }
-            .hero-cta { flex-direction: column; }
-            .skills-grid { grid-template-columns: 1fr; }
+            .hero { padding: 130px 0 80px; }
+            footer { flex-direction: column; gap: 16px; }
+            .cursor-dot, .cursor-ring { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <nav>
-                <div class="logo">DM</div>
-                <ul class="nav-links">
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#experience">Experience</a></li>
-                    <li><a href="#skills">Skills</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
-        </header>
 
-        <section class="hero">
-            <div class="badge"><span class="dot"></span>Joining Eli Lilly — AI in Chemistry</div>
-            <h1>Darvin <span>Magundayao</span></h1>
-            <p class="subtitle">Computational Chemist & AI Researcher bridging chemistry and machine learning for drug discovery. Currently at Ipsen, moving to Eli Lilly.</p>
-            <div class="hero-cta">
-                <a href="https://www.linkedin.com/in/darvin-magundayao-128450208/" class="btn btn-primary" target="_blank">LinkedIn</a>
-                <a href="https://github.com/darvincode" class="btn btn-secondary" target="_blank">GitHub</a>
-            </div>
-        </section>
+<div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+</div>
 
-        <section id="about">
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<header>
+    <nav id="mainNav">
+        <div class="logo">D<span>.</span>M</div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+
+    <section class="hero">
+        <div class="hero-eyebrow">
+            <span class="pulse"></span>
+            Joining Eli Lilly — AI in Chemistry · 2026
+        </div>
+        <h1>
+            <span class="first">Darvin</span>
+            <span class="last">Magundayao</span>
+        </h1>
+        <p class="hero-sub">
+            Computational Chemist & AI Researcher bridging molecular science and machine learning to accelerate drug discovery.
+        </p>
+        <div class="hero-cta">
+            <a href="https://www.linkedin.com/in/darvin-magundayao-128450208/" class="btn btn-primary" target="_blank">
+                ↗ LinkedIn
+            </a>
+            <a href="https://github.com/darvincode" class="btn btn-ghost" target="_blank">
+                ⌥ GitHub
+            </a>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="about">
+        <div class="reveal">
+            <p class="section-label">Background</p>
             <h2>About</h2>
-            <div class="about-content">
-                <p>Computational chemist applying machine learning and data-driven approaches to accelerate drug discovery.</p>
-                <p>Strong foundation in chemistry and computational modeling, transitioning into AI-driven drug discovery.</p>
+        </div>
+        <div class="about-grid reveal">
+            <div class="about-card">
+                <div class="about-card-icon">🎓</div>
+                <span class="highlight">King's College London</span>
+                <h3>MSci Chemistry with Biomedicine</h3>
+                <p>Integrated master's degree at one of the world's leading research institutions, combining rigorous chemistry with biomedical science.</p>
             </div>
-            <div class="stats">
-                <div class="stat-card"><div class="stat-number">MSc</div><div class="stat-label">Chemistry with Biomedicine<br>King's College London</div></div>
-                <div class="stat-card"><div class="stat-number">MSc</div><div class="stat-label">Computational Chemistry<br>Research Thesis</div></div>
+            <div class="about-card">
+                <div class="about-card-icon">🔬</div>
+                <span class="highlight">Focus</span>
+                <h3>AI-Driven Drug Discovery</h3>
+                <p>Applying machine learning and computational modelling to accelerate pharmaceutical research — from molecular simulation to predictive analytics.</p>
             </div>
-        </section>
+            <div class="about-card">
+                <div class="about-card-icon">⚗️</div>
+                <span class="highlight">Current</span>
+                <h3>Pharma & Research</h3>
+                <p>Pharmaceutical industry experience at Ipsen, alongside academic research at King's College London exploring electronic coupling prediction via ML.</p>
+            </div>
+            <div class="about-card">
+                <div class="about-card-icon">🚀</div>
+                <span class="highlight">Next Chapter</span>
+                <h3>Eli Lilly — AI in Chemistry</h3>
+                <p>Joining Eli Lilly to work at the intersection of artificial intelligence and chemical sciences in drug discovery.</p>
+            </div>
+        </div>
+    </section>
 
-        <section id="experience">
+    <div class="section-divider"></div>
+
+    <section id="experience">
+        <div class="reveal">
+            <p class="section-label">Career</p>
             <h2>Experience</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">Coming Soon — 2026</div>
-                    <h3 class="timeline-title">Associate — AI in Chemistry</h3>
-                    <p class="timeline-org"><a href="https://www.lilly.com/" target="_blank">Eli Lilly</a></p>
-                    <p class="timeline-desc">Drug discovery using AI and machine learning.</p>
+        </div>
+        <div class="timeline">
+            <div class="timeline-track"></div>
+
+            <div class="timeline-item reveal" style="transition-delay: 0.1s;">
+                <div class="timeline-dot"></div>
+                <div class="timeline-meta">
+                    <span class="timeline-date">2026 — Upcoming</span>
+                    <span class="badge-pill badge-upcoming">Starting Soon</span>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">Present</div>
-                    <h3 class="timeline-title">Researcher</h3>
-                    <p class="timeline-org"><a href="https://www.ipsen.com/" target="_blank">Ipsen</a></p>
-                    <p class="timeline-desc">Pharmaceutical research with computational methods.</p>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">Jun - Aug 2025 · Hybrid</div>
-                    <h3 class="timeline-title">Researcher</h3>
-                    <p class="timeline-org">King's College London</p>
-                    <p class="timeline-desc">ML model assessment for electronic coupling prediction. Molecular dynamics simulations, Python, GitHub.<br>Supervisor: <a href="https://www.mattaresearch.com/team" target="_blank">Micaela Matta</a></p>
+                <div class="timeline-body">
+                    <div class="timeline-role">Associate — AI in Chemistry</div>
+                    <div class="timeline-org"><a href="https://www.lilly.com/" target="_blank">Eli Lilly</a></div>
+                    <div class="timeline-desc">Drug discovery using AI and machine learning at a global pharmaceutical leader.</div>
                 </div>
             </div>
-        </section>
 
-        <section id="skills">
+            <div class="timeline-item active reveal" style="transition-delay: 0.2s;">
+                <div class="timeline-dot"></div>
+                <div class="timeline-meta">
+                    <span class="timeline-date">Feb 2026 — Present</span>
+                    <span class="badge-pill badge-active">Current</span>
+                </div>
+                <div class="timeline-body">
+                    <div class="timeline-role">New Drug Product Technician</div>
+                    <div class="timeline-org"><a href="https://www.ipsen.com/" target="_blank">Ipsen</a></div>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal" style="transition-delay: 0.3s;">
+                <div class="timeline-dot"></div>
+                <div class="timeline-meta">
+                    <span class="timeline-date">Jun — Aug 2025 · Hybrid</span>
+                </div>
+                <div class="timeline-body">
+                    <div class="timeline-role">Researcher</div>
+                    <div class="timeline-org"><a href="https://www.kcl.ac.uk/" target="_blank">King's College London</a></div>
+                    <div class="timeline-desc">
+                        ML model assessment for electronic coupling prediction. Molecular dynamics simulations, Python, GitHub.<br>
+                        Supervisor: <a href="https://www.mattaresearch.com/team" target="_blank" style="color: var(--accent);">Micaela Matta</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="skills">
+        <div class="reveal">
+            <p class="section-label">Expertise</p>
             <h2>Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-card"><div class="skill-icon">🧪</div><h3>Computational Chemistry</h3><p>MD simulations, quantum chemistry</p><div class="tags"><span class="tag">MD</span><span class="tag">DFT</span></div></div>
-                <div class="skill-card"><div class="skill-icon">🤖</div><h3>AI & Machine Learning</h3><p>ML for drug discovery</p><div class="tags"><span class="tag">Python</span><span class="tag">Deep Learning</span></div></div>
-                <div class="skill-card"><div class="skill-icon">💻</div><h3>Software Development</h3><p>Tools and pipelines</p><div class="tags"><span class="tag">Code</span><span class="tag">Automation</span></div></div>
-                <div class="skill-card"><div class="skill-icon">🔬</div><h3>Drug Discovery</h3><p>Pharmaceutical research</p><div class="tags"><span class="tag">ADMET</span></div></div>
+        </div>
+        <div class="skills-grid reveal">
+            <div class="skill-card">
+                <span class="skill-icon">🧪</span>
+                <h3>Computational Chemistry</h3>
+                <p>Molecular dynamics simulations and quantum chemical modelling for pharmaceutical applications.</p>
+                <div class="tags">
+                    <span class="tag">MD Simulations</span>
+                    <span class="tag">DFT</span>
+                    <span class="tag">Quantum Chem</span>
+                </div>
             </div>
-        </section>
+            <div class="skill-card">
+                <span class="skill-icon">🤖</span>
+                <h3>AI & Machine Learning</h3>
+                <p>Developing and evaluating ML models for molecular property prediction and drug discovery pipelines.</p>
+                <div class="tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Deep Learning</span>
+                    <span class="tag">Graph Neural Nets</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <span class="skill-icon">💻</span>
+                <h3>Software & Pipelines</h3>
+                <p>Building reproducible research tools, automation pipelines, and data-driven scientific workflows.</p>
+                <div class="tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">GitHub</span>
+                    <span class="tag">Automation</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <span class="skill-icon">🔬</span>
+                <h3>Drug Discovery</h3>
+                <p>End-to-end understanding of pharmaceutical R&D — from molecular design to formulation and ADMET profiling.</p>
+                <div class="tags">
+                    <span class="tag">ADMET</span>
+                    <span class="tag">Lead Optimisation</span>
+                    <span class="tag">Formulation</span>
+                </div>
+            </div>
+        </div>
 
-        <section id="contact" style="padding-bottom: 100px;">
+        <!-- Terminal easter egg -->
+        <div class="terminal reveal" style="transition-delay: 0.2s;">
+            <div class="terminal-bar">
+                <div class="t-dot t-dot-r"></div>
+                <div class="t-dot t-dot-y"></div>
+                <div class="t-dot t-dot-g"></div>
+                <span class="terminal-title">darvin@research ~ </span>
+            </div>
+            <div class="terminal-body">
+                <div class="terminal-line"><span class="t-prompt">❯ </span><span class="t-cmd">python profile.py --query expertise</span></div>
+                <div class="terminal-line"><span class="t-out">Loading researcher profile...</span></div>
+                <div class="terminal-line"><span class="t-green">✓ </span><span class="t-out">MSci Chemistry with Biomedicine — King's College London</span></div>
+                <div class="terminal-line"><span class="t-green">✓ </span><span class="t-out">Current: New Drug Product Technician @ Ipsen</span></div>
+                <div class="terminal-line"><span class="t-green">✓ </span><span class="t-out">Incoming: AI in Chemistry @ Eli Lilly (2026)</span></div>
+                <div class="terminal-line"><span class="t-accent">→ </span><span class="t-out">Research focus: ML for molecular property prediction</span></div>
+                <div class="terminal-line"><span class="t-prompt">❯ </span><span class="t-cmd">_</span><span class="cursor"></span></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <section id="contact" style="padding-bottom: 100px;">
+        <div class="reveal">
+            <p class="section-label">Get In Touch</p>
             <h2>Contact</h2>
-            <p class="subtitle"><a href="https://www.linkedin.com/in/darvin-magundayao-128450208/" target="_blank" style="color: #58a6ff;">Connect on LinkedIn</a> or <a href="https://github.com/darvincode" target="_blank" style="color: #58a6ff;">GitHub</a></p>
-        </section>
+        </div>
+        <div class="contact-grid reveal">
+            <a href="https://www.linkedin.com/in/darvin-magundayao-128450208/" target="_blank" class="contact-card">
+                <div class="contact-icon">in</div>
+                <div class="contact-info">
+                    <h3>LinkedIn</h3>
+                    <p>Professional network & updates</p>
+                </div>
+            </a>
+            <a href="https://github.com/darvincode" target="_blank" class="contact-card">
+                <div class="contact-icon">⌥</div>
+                <div class="contact-info">
+                    <h3>GitHub</h3>
+                    <p>Projects & open source work</p>
+                </div>
+            </a>
+        </div>
+    </section>
 
-        <footer>
-            <div class="footer-links">
-                <a href="https://www.linkedin.com/in/darvin-magundayao-128450208/" target="_blank">LinkedIn</a>
-                <a href="https://github.com/darvincode" target="_blank">GitHub</a>
-            </div>
-            <p>© 2026 Darvin Magundayao</p>
-        </footer>
-    </div>
+    <footer>
+        <span>© 2026 Darvin Magundayao</span>
+        <div class="footer-links">
+            <a href="https://www.linkedin.com/in/darvin-magundayao-128450208/" target="_blank">LinkedIn</a>
+            <a href="https://github.com/darvincode" target="_blank">GitHub</a>
+        </div>
+    </footer>
+
+</div>
+
+<script>
+    // ── Custom cursor
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0;
+    let ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', e => {
+        mouseX = e.clientX; mouseY = e.clientY;
+        dot.style.left = mouseX + 'px';
+        dot.style.top = mouseY + 'px';
+    });
+
+    function animateRing() {
+        ringX += (mouseX - ringX) * 0.12;
+        ringY += (mouseY - ringY) * 0.12;
+        ring.style.left = ringX + 'px';
+        ring.style.top = ringY + 'px';
+        requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            ring.style.width = '50px';
+            ring.style.height = '50px';
+            ring.style.borderColor = 'rgba(92,124,250,0.7)';
+            dot.style.transform = 'translate(-50%, -50%) scale(1.5)';
+        });
+        el.addEventListener('mouseleave', () => {
+            ring.style.width = '32px';
+            ring.style.height = '32px';
+            ring.style.borderColor = 'rgba(92,124,250,0.4)';
+            dot.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+    });
+
+    // ── Nav scroll effect
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // ── Intersection Observer for reveal animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal, .timeline-item').forEach(el => observer.observe(el));
+
+    // ── Parallax on hero orbs
+    window.addEventListener('mousemove', e => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 2;
+        const y = (e.clientY / window.innerHeight - 0.5) * 2;
+        document.querySelector('.orb-1').style.transform = `translate(${x * 20}px, ${y * 20}px)`;
+        document.querySelector('.orb-2').style.transform = `translate(${x * -15}px, ${y * -15}px)`;
+        document.querySelector('.orb-3').style.transform = `translate(${x * 10}px, ${y * 10}px)`;
+    });
+
+    // ── Typed terminal effect
+    const terminalLines = document.querySelectorAll('.terminal-line');
+    terminalLines.forEach((line, i) => {
+        line.style.opacity = '0';
+        setTimeout(() => {
+            line.style.transition = 'opacity 0.3s';
+            line.style.opacity = '1';
+        }, 400 + i * 220);
+    });
+
+    // Re-trigger terminal on scroll into view
+    const termObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                terminalLines.forEach((line, i) => {
+                    line.style.opacity = '0';
+                    setTimeout(() => { line.style.opacity = '1'; }, i * 220);
+                });
+                termObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    const terminal = document.querySelector('.terminal');
+    if (terminal) termObserver.observe(terminal);
+</script>
 </body>
 </html>
